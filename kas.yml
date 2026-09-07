@@ -73,6 +73,13 @@ local_conf_header:
         ftp://.*/.* http://downloads.yoctoproject.org/mirror/sources/ \n \
         http://.*/.* http://downloads.yoctoproject.org/mirror/sources/ \n \
         https://.*/.* http://downloads.yoctoproject.org/mirror/sources/ \n"
+  # ftpmirror.gnu.org silently drops requests when hit with too many
+  # concurrent connections from one IP (verified: fine one-at-a-time, hangs
+  # with 3+ simultaneous fetches). Cap parallelism so bitbake doesn't burst
+  # several do_fetch tasks at that host at once.
+  parallelism: |
+    BB_NUMBER_THREADS = "3"
+    PARALLEL_MAKE = "-j 3"
   # Uncomment/extend to enable board features, e.g.:
   # rpi-specific: |
   #   ENABLE_I2C = "1"
