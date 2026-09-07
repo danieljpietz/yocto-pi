@@ -63,6 +63,16 @@ local_conf_header:
   # license; accept it explicitly or drop Wi-Fi support for this machine.
   license: |
     LICENSE_FLAGS_ACCEPTED = "synaptics-killswitch"
+  # ftpmirror.gnu.org/savannah.gnu.org (shared GNU infra IP) silently hangs
+  # connections instead of failing fast, stalling do_fetch for many minutes
+  # before bitbake's normal MIRRORS fallback kicks in. Try the reliable
+  # Yocto Project mirror first instead.
+  premirrors: |
+    PREMIRRORS:prepend = " \
+        git://.*/.* http://downloads.yoctoproject.org/mirror/sources/ \n \
+        ftp://.*/.* http://downloads.yoctoproject.org/mirror/sources/ \n \
+        http://.*/.* http://downloads.yoctoproject.org/mirror/sources/ \n \
+        https://.*/.* http://downloads.yoctoproject.org/mirror/sources/ \n"
   # Uncomment/extend to enable board features, e.g.:
   # rpi-specific: |
   #   ENABLE_I2C = "1"
